@@ -1,16 +1,11 @@
 # DV - Мини-проект «DevOps-конвейер»
 
-> Этот файл - **индивидуальный**. Его проверяют по **rubric_DV.md** (5 критериев × {0/1/2} → 0-10).
-> Подсказки помечены `TODO:` - удалите после заполнения.
-> Все доказательства/скрины кладите в **EVIDENCE/** и ссылайтесь на конкретные файлы/якоря.
-
 ---
 
 ## 0) Мета
 
-- **Проект (опционально BYO):** TODO: ссылка / «учебный шаблон»
-- **Версия (commit/date):** TODO: abc123 / YYYY-MM-DD
-- **Кратко (1-2 предложения):** TODO: что именно собираем/тестируем/пакуем
+- **Проект:** учебный шаблон
+- **Версия (commit/date):** 2025-12-07
 
 ---
 
@@ -19,116 +14,81 @@
 - **Одна команда для сборки/тестов:**
 
   ```bash
-  # TODO: замените на ваш one-liner
-  make build test
+  make ci-s06
   ```
-
-  _Если без Makefile: укажите последовательность команд._
 
 - **Версии инструментов (фиксация):**
 
-  ```bash
-  # TODO: примеры - удалите лишнее
-  python --version
-  pip freeze > EVIDENCE/pip-freeze.txt
-  node --version
-  npm ci --version
-  ```
+1. python >= 3.11, есть проверка в `Makefile`
+2. версии библиотек зафиксированы в [pip-freeze.txt](https://github.com/titarenko-a-v/secdev-lite-titarenko/blob/main/EVIDENCE/S06/pip-freeze.txt)
 
-- **Описание шагов (кратко):** TODO: 2-4 пункта как запустить локально
+- **Описание шагов (кратко):**
 
+1. Склонировать репозиторий https://github.com/titarenko-a-v/secdev-s06-s08
+2. Создать файл .env на основе шаблона .env.example
+3. Запустить сборку и тесты `make ci-s06`
+4. Запустить приложение `make run`
 ---
 
 ## 2) Контейнеризация (DV2)
 
-- **Dockerfile:** TODO: `path/to/Dockerfile` (база, multi-stage? минимальный образ?)
+- **[Dockerfile](https://github.com/titarenko-a-v/secdev-s06-s08/blob/main/Dockerfile):** добавлены health check и non-root user 
 - **Сборка/запуск локально:**
 
   ```bash
   docker build -t app:local .
   docker run --rm -p 8080:8080 app:local
   ```
-
-  _Укажите порт/команду/healthcheck, если есть._
-
-- **(Опционально) docker-compose:** `TODO: path/to/docker-compose.yml` - кратко, какие сервисы.
+  
+- **[docker-compose](https://github.com/titarenko-a-v/secdev-s06-s08/blob/main/docker-compose.yml)**
 
 ---
 
 ## 3) CI: базовый pipeline и стабильный прогон (DV3)
 
-- **Платформа CI:** TODO: GitHub Actions / GitLab CI / другое
-- **Файл конфига CI:** TODO: путь (напр., `.github/workflows/ci.yml`)
-- **Стадии (минимум):** checkout → deps → **build** → **test** → (package)
-- **Фрагмент конфигурации (ключевые шаги):**
-
-  ```yaml
-  # TODO: укоротите под себя
-  jobs:
-  build_test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: '3.11' }
-      - name: Cache deps
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: pip-${{ hashFiles('**/requirements*.txt') }}
-      - run: pip install -r requirements.txt
-      - run: pytest -q
-
-  ```
-
-- **Стабильность:** TODO: последние N запусков зелёные? краткий комментарий
-- **Ссылка/копия лога прогона:** `EVIDENCE/ci-YYYY-MM-DD-build.txt`
+- **Платформа CI:** GitHub Actions
+- **Файл конфига CI:** [workflows/ci.yml](https://github.com/titarenko-a-v/secdev-s06-s08/blob/main/.github/workflows/ci.yml)
+- **Стадии:** checkout → deps → **build** → **test** → (package)
+- **Стабильность:** Запуск зеленый
+- **Ссылка/копия лога прогона:** [ci-log.txt](https://github.com/titarenko-a-v/secdev-lite-titarenko/blob/main/EVIDENCE/S08/ci-log.txt)
 
 ---
 
 ## 4) Артефакты и логи конвейера (DV4)
 
-_Сложите файлы в `/EVIDENCE/` и подпишите их назначение._
-
-| Артефакт/лог                    | Путь в `EVIDENCE/`            | Комментарий                                  |
-|---------------------------------|-------------------------------|----------------------------------------------|
-| Лог успешной сборки/тестов (CI) | `ci-YYYY-MM-DD-build.txt`     | ключевые шаги/время                          |
-| Локальный лог сборки (опц.)     | `local-build-YYYY-MM-DD.txt`  | для сверки                                   |
-| Описание результата сборки      | `package-notes.txt`           | какой образ/wheel/архив получился            |
-| Freeze/версии инструментов      | `pip-freeze.txt` (или аналог) | воспроизводимость окружения                  |
+| Артефакт/лог                    | Путь в `EVIDENCE/`   | Комментарий                       |
+|---------------------------------|----------------------|-----------------------------------|
+| Лог успешной сборки/тестов (CI) | `S08/ci-log.txt`     | ключевые шаги                     |
+| Локальный лог сборки (опц.)     | `S07/build.log`      | билд докера                       |
+| Freeze/версии инструментов      | `S06/pip-freeze.txt` | воспроизводимость окружения       |
 
 ---
 
 ## 5) Секреты и переменные окружения (DV5 - гигиена, без сканеров)
 
 - **Шаблон окружения:** добавлен файл `/.env.example` со списком переменных (без значений), например:
-  - `REG_USER=`
-  - `REG_PASS=`
-  - `API_TOKEN=`
+  - APP_NAME=<set_me>
+  - DEBUG=<set_me>
+  - SECRET_KEY=<set_me>
 - **Хранение и передача в CI:**  
-  - секреты лежат в настройках репозитория/организации (**masked**),  
+  - секреты лежат в настройках репозитория  
   - в pipeline они **не печатаются** в явном виде.
 - **Пример использования секрета в job (адаптируйте):**
 
   ```yaml
-  - name: Login to registry (masked)
-    env:
-      REG_USER: ${{ secrets.REG_USER }}
-      REG_PASS: ${{ secrets.REG_PASS }}
-    run: |
-      echo "::add-mask::$REG_PASS"
-      echo "$REG_PASS" | docker login -u "$REG_USER" --password-stdin registry.example.com
+  - name: Mask secret
+    run: echo "::add-mask::${{ secrets.SECRET_KEY }}"
   ```
 
 - **Быстрая проверка отсутствия секретов в коде (любой простой способ):**
 
   ```bash
-  # пример: поиск популярных паттернов
   git grep -nE 'AKIA|SECRET|token=|password=' || true
   ```
 
-  _Сохраните вывод в `EVIDENCE/grep-secrets.txt`._
-- **Памятка по ротации:** TODO: кто/как меняет secrets при утечке/ревоке токена.
+  [grep-secrets.txt](https://github.com/titarenko-a-v/secdev-lite-titarenko/blob/main/EVIDENCE/S08/grep-secrets.txt)
+
+- **Памятка по ротации:** Секреты хранятся в репозитории и меняются при подозрении на утечку.
 
 ---
 
@@ -136,13 +96,25 @@ _Сложите файлы в `/EVIDENCE/` и подпишите их назна
 
 _Чтобы преподаватель быстро сверил файлы._
 
-| Тип     | Файл в `EVIDENCE/`            | Дата/время         | Коммит/версия | Runner/OS    |
-|---------|--------------------------------|--------------------|---------------|--------------|
-| CI-лог  | `ci-YYYY-MM-DD-build.txt`      | `YYYY-MM-DD hh:mm` | `abc123`      | `gha-ubuntu` |
-| Лок.лог | `local-build-YYYY-MM-DD.txt`   | …                  | `abc123`      | `local`      |
-| Package | `package-notes.txt`            | …                  | `abc123`      | -            |
-| Freeze  | `pip-freeze.txt` (или аналог)  | …                  | `abc123`      | -            |
-| Grep    | `grep-secrets.txt`             | …                  | `abc123`      | -            |
+| Тип                            | Файл в `EVIDENCE/`        |
+|--------------------------------|---------------------------|
+| Логи локального запуска тестов | `S06/logs/pytest.log`     |
+| Зависимости pip                | `S06/pip-freeze.txt`      |
+| Репорт тестов                  | `S06/test-report.xml`     |
+| Лог билда докера               | `S07/build.log`           |
+| Лог билда docker-compose       | `S07/compose-up.log`      |
+| Размер контейнера              | `S07/image-size.txt`      |
+| Код ответа главной страницы    | `S07/http_root_code.json` |
+| Health                         | `S07/health.json`         |
+| Inspect Web                    | `S07/inspect_web.json`    |
+| Non-root                       | `S07/non-root.txt`        |
+| Процессы докер                 | `S07/ps.txt`              |
+| Лог запуска контейнера         | `S07/run.log`             |
+| Лог CI                         | `S08/ci-log.txt`          |
+| Ссылка на последний запуск CI  | `S08/ci-run.txt`          |
+| Покрытие тестами               | `S08/coverage.xml`        |
+| Отчёт по тестам                | `S08/test-report.xml`     |
+| Греп секретов гитом            | `S08/grep-secrets.txt`    |
 
 ---
 
@@ -155,10 +127,10 @@ _Чтобы преподаватель быстро сверил файлы._
 
 ## 8) Самооценка по рубрике DV (0/1/2)
 
-- **DV1. Воспроизводимость локальной сборки и тестов:** [ ] 0 [ ] 1 [ ] 2  
-- **DV2. Контейнеризация (Docker/Compose):** [ ] 0 [ ] 1 [ ] 2  
-- **DV3. CI: базовый pipeline и стабильный прогон:** [ ] 0 [ ] 1 [ ] 2  
-- **DV4. Артефакты и логи конвейера:** [ ] 0 [ ] 1 [ ] 2  
-- **DV5. Секреты и конфигурация окружения (гигиена):** [ ] 0 [ ] 1 [ ] 2  
+- **DV1. Воспроизводимость локальной сборки и тестов:** 2  
+- **DV2. Контейнеризация (Docker/Compose):** 2  
+- **DV3. CI: базовый pipeline и стабильный прогон:** 2  
+- **DV4. Артефакты и логи конвейера:** 2  
+- **DV5. Секреты и конфигурация окружения (гигиена):** 2  
 
-**Итог DV (сумма):** __/10
+**Итог DV (сумма):** 10/10
