@@ -1,0 +1,50 @@
+Compose now can delegate build to bake for better performances
+Just set COMPOSE_BAKE=true
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [web internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.08kB done
+#1 DONE 0.0s
+
+#2 [web internal] load metadata for docker.io/library/python:3.11-slim
+#2 DONE 8.9s
+
+#3 [web internal] load .dockerignore
+#3 transferring context: 189B done
+#3 DONE 0.0s
+
+#4 [web internal] load build context
+#4 transferring context: 918B done
+#4 DONE 0.0s
+
+#5 [web 1/6] FROM docker.io/library/python:3.11-slim@sha256:193fdd0bbcb3d2ae612bd6cc3548d2f7c78d65b549fcaa8af75624c47474444d
+#5 resolve docker.io/library/python:3.11-slim@sha256:193fdd0bbcb3d2ae612bd6cc3548d2f7c78d65b549fcaa8af75624c47474444d 0.0s done
+#5 DONE 0.0s
+
+#6 [web 3/6] COPY requirements.txt ./
+#6 CACHED
+
+#7 [web 4/6] RUN pip install --no-cache-dir -r requirements.txt
+#7 CACHED
+
+#8 [web 2/6] WORKDIR /app
+#8 CACHED
+
+#9 [web 5/6] COPY app ./app
+#9 CACHED
+
+#10 [web 6/6] COPY scripts ./scripts
+#10 CACHED
+
+#11 [web] exporting to image
+#11 exporting layers done
+#11 exporting manifest sha256:fabee53cd42e8495ad0bb91e514d885f335b6c227f5c3ad223e5872c691adf03 done
+#11 exporting config sha256:f5f47ab9ab3d1830dca26f708641d0a157e6edecc6c342b23d5cd7311bb61e64 done
+#11 exporting attestation manifest sha256:c062458f065be95c73af389182653950edadfe4829f8de081842ca35af10badb done
+#11 exporting manifest list sha256:27c93bb64322f059976cfc07ce9143fa34d932dd4747dd15daf5bc9129f96300 done
+#11 naming to docker.io/library/secdev-seed:latest done
+#11 unpacking to docker.io/library/secdev-seed:latest done
+#11 DONE 0.0s
+
+#12 [web] resolving provenance for metadata file
+#12 DONE 0.0s
